@@ -1,0 +1,131 @@
+{% extends "../base.html" %}
+{% load static %}
+{% load blogapp_extras %}
+{% block head_title %}
+MarcusCodex - Home
+{% endblock head_title %}
+{% block body %}
+<main>
+  <div class="container text-sm">
+    <!-- Breadcrumbs Start -->
+    <div class="text-sm breadcrumbs pt-20">
+      <ul>
+        <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+      </ul>
+    </div>
+    <!-- Breadcrumbs End -->
+
+    <div class="flex flex-col w-full">
+      <div class="divider"></div>
+    </div>
+
+    <!-- Latest Post Start -->
+    <div class="flex flex-col text-center">
+      <h1 class="text-3xl font-extrabold mb-2">AI & Django</h1>
+      <h1 class="text-3xl font-extrabold mb-2">Projects, Tips, and Tutorials</h1>
+      <div class="text-center py-4">
+        <p>My corner of the internet where I share hands-on AI web application projects using Django Web Framework.</p>
+    </div>    
+  </div>
+  <h1 class ="pt-10 text-lg font-extrabold mb-2">Latest Post</h1>            
+  <div class="mb-6 card w-container shadow-2xl bg-base-100 rounded-3xl duration-500 hover:scale-105 hover:shadow-xl">
+    <div class="card-body">
+      <a href={% url 'blogpage' slug=latest_blog_post.slug %} style="text-decoration: none" >
+        <h2 class="card-title">{{latest_blog_post.title}}</h2>
+      </a>
+      <span class="flex text-gray-500">
+        {{latest_blog_post.publish_date}}
+      </span>        
+      <div class="line-clamp-2 mb-2 text-gray-500">
+        {{ latest_blog_intro|render_markdown }}...
+      </div>      
+      <a href={% url 'blogpage' slug=latest_blog_post.slug %} style="text-decoration: none;">
+        <div class="card-actions justify-end">
+          <button class="btn btn-primary">Keep Reading →</button>
+        </div>
+      </a>
+    </div>
+  </div>  
+  <!-- Latest Post End -->
+
+  <div class="flex flex-col w-full">
+    <div class="divider"></div>
+  </div> 
+
+  <!-- Cateegories Start -->
+  <h1 class ="text-lg font-extrabold mb-2"> Categories </h1>
+  <div class="flex flex-wrap gap-2">
+    {% for tag in tags %}
+      <a href="{% url 'categories' tag.name %}" class="link hover:text-primary">{{ tag.name|capfirst }}</a>
+      {% if not forloop.last %}
+      ,
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="flex flex-col w-full">
+    <div class="divider"></div>
+  </div>
+  <!-- Categories End -->
+
+  <!-- Links of Blog Posts Start -->
+  <h1 class="text-lg font-extrabold mb-2">Recent Posts</h1>
+  <ul>
+    {% for blog in blogposts %}
+    <div class="flex">
+      <li class="mb-2 mr-4 hidden sm:block">
+        <td>{{ blog.publish_date|date:"Y · M · d" }}</td>
+      </li>
+      <li class="mb-2 mr-4 block sm:hidden">
+        <td>{{ blog.publish_date|date:"y/m/d" }}</td>
+      </li>
+      <li>
+        <td><a href={% url 'blogpage' slug=blog.slug %}> {{blog.title}}</a></td>
+      </li>
+    </div>
+    {% endfor %}
+  </ul> 
+        
+  <!-- Links of Blog Posts End -->
+  <div class="py-6">
+    <a href="{% url 'categories' tag_id='all' %}">See more posts →</a>
+  </div>
+
+  <!-- Modal to say Thank You after subscribing -->
+  <dialog id="thankYouModal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Thank You!</h3>
+      <p class="py-4">You're subscribed!</p>
+      <div class="modal-action">
+        <button onclick="closeModal()" class="btn">Close</button>
+      </div>      
+    </div>
+  </dialog>    
+</main>
+{% endblock body %}
+{% block js %}
+  <script>
+      const subscribeForm = document.getElementById('subscribeForm');
+      const thankYouModal = document.getElementById('thankYouModal');
+    
+      subscribeForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const formData = new FormData(subscribeForm);
+          try {
+              const response = await fetch(subscribeForm.action, {
+                  method: subscribeForm.method,
+                  body: formData,
+              });
+              if (response.ok) {
+                  thankYouModal.showModal();
+                  subscribeForm.reset();
+              }
+          } catch (error) {
+              console.error('Error:', error);
+          }
+      });
+    
+      function closeModal() {
+          thankYouModal.close();
+      }
+    </script>    
+{% endblock js %}

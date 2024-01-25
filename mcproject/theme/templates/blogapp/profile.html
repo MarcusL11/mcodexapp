@@ -1,0 +1,57 @@
+{% extends "../base.html" %}
+{% block title %} Marcus Codex - {{user.username}} Profile{% endblock %}
+{% block body %}
+<main>
+    <div class="container text-sm mb-20">
+    <!-- Breadcrumbs Start -->
+    <div class="text-sm breadcrumbs pt-20">
+        <ul>
+          <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+          <li><a href={% url 'profile' %} class="hover:text-primary">Profile</a></li> 
+          <li><a href="" class="hover:text-primary">{{post.title}}</a></li> 
+        </ul>
+      </div>
+      <!-- Breadcrumbs End -->
+  
+      <div class="flex flex-col w-full">
+        <div class="divider"></div>
+      </div>        
+      <!-- Latest Post Start -->
+        <div class="pt-20 flex flex-col text-center">
+            <h1 class="mt-10 text-5xl font-bold">{{ user.username}}</h1>
+            <div class="avatar justify-center my-8">
+                <div class="w-1/3 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <img src="{{ subscriber.profile_pic.url }}" alt="Profile Picture"/>
+                </div>
+            </div>
+
+            <div class="justify-center">
+                <button class="btn btn-primary btn-md w-1/3"><a href="{% url 'update_profile_pic' %}">Update Profile Picture</a></button>
+            </div>
+
+            <div class="mt-12 my-4">
+                <p class="text-lg"> Subscription Status: <span class="font-bold text-primary">{{ subscriber_status }}</span></p>
+            </div>
+
+            <form method="post" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <div class="form-control">
+                    <label class="label justify-center flex cursor-pointer">
+                        <span class="text-lg mx-4 label-text">Subscribe to E-mails: </span>
+                        {% if subscriber_status is False %}
+                            <input type="checkbox" name="subscribe" id="id_subscribe"  class="checkbox" />
+                        {% else %}
+                            <input type="checkbox" name="subscribe" id="id_subscribe" checked="" class="checkbox" />
+                        {% endif %}
+                    </label>
+                </div>                
+                <div class="flex justify-center my-4">
+                    <button type="submit" class="btn btn-primary btn-md w-1/3">Update Subscription Status</button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}
+

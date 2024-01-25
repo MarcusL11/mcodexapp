@@ -1,0 +1,43 @@
+{% extends "../base.html" %}
+{% block title %} Marcus Codex - Register {% endblock %}
+{% block body %}
+<main>
+    <div class="container text-sm mb-20">
+        <!-- Breadcrumbs Start -->
+        <div class="text-sm breadcrumbs pt-20">
+            <ul>
+            <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+            <li><a href={% url 'register' %} class="hover:text-primary">Register</a></li> 
+            </ul>
+        </div>
+        <!-- Breadcrumbs End -->
+    
+        <div class="flex flex-col w-full">
+            <div class="divider"></div>
+        </div>                 
+      <!-- Latest Post Start -->
+        <div class="flex flex-col text-center">
+            <h1 class="mt-10 text-5xl font-bold">Register</h1>
+            <div class="mt-6 border-solid border-4 rounded-3xl border-opacity-75 border-primary p-6"> 
+                <form action="{% url 'register' %}" method="post">
+                    {% csrf_token %}
+                    <div class="flex my-4 justify-center">
+                        <input type="text" placeholder="Create a Username" class="input input-bordered w-1/2 max-w-xs" name="username" maxlength="150" required="" id="id_username" aria-describedby="id_username_helptext">                
+                    </div>
+                    <div class="flex justify-center my-4">
+                        <input type="email" placeholder="Email" class="input input-bordered w-1/2 max-w-xs" name="email" maxlength="254" required="" id="id_email">
+                    </div>
+                    <div class="flex justify-center my-4">
+                        <input type="password" placeholder="Password" class="input input-bordered w-1/2 max-w-xs" name="password1" autocomplete="new-password" required="" aria-describedby="id_password1_helptext" id="id_password1">
+                    </div>
+                    <div class="flex justify-center my-4">
+                        <input type="password" placeholder="Confirm Password" class="input input-bordered w-1/2 max-w-xs" name="password2" autocomplete="new-password" required="" aria-describedby="id_password2_helptext" id="id_password2">
+                    </div>
+                    <button type="submit" class="my-4 btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Register</button>                
+                    <p>If you have an account already, <a href="{% url "login" %}">login here</a>.</p>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

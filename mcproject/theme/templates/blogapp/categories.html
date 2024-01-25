@@ -1,0 +1,60 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block head_title %}
+MarcusCodex - Categories
+{% endblock head_title %}
+{% block body %}
+<main>
+    <div class="container text-sm">
+        <!-- Breadcrumbs Start -->
+        <div class="text-sm breadcrumbs pt-20">
+            <ul>
+                <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+                <li><a href={% url 'categories' tag_id='all' %} class="hover:text-primary">All Posts</a></li> 
+            </ul>
+        </div>
+        <!-- Breadcrumbs End -->
+    
+        <div class="flex flex-col w-full">
+            <div class="divider"></div>
+        </div>
+
+        <!-- Cateegories Start -->
+        <h1 class ="text-lg font-extrabold mb-2">Categories </h1>
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'categories' tag_id='all' %}" class="link hover:text-primary">All</a>
+            {% for tag in tags %}
+                <a href="{% url 'categories' tag.name%}" class="link hover:text-primary">{{ tag.name|capfirst }}</a>
+                    {% if not forloop.last %}
+                    ,
+                    {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="flex flex-col w-full">
+            <div class="divider"></div>
+        </div>        
+
+        <!-- Cateegories End -->
+        
+        <h1 class ="text-lg font-extrabold mb-2">
+            {% if not tag.name %}
+                All Posts    
+            {% else %}
+                {{ tag.name|capfirst }}
+            {% endif %}
+        </h1>              
+        
+        <!-- Links of Blog Posts Start -->
+        <p class="font-bold mb-2">Related Posts</p>
+        <ul>
+            {% for blog in blog_categories %}
+            <li class="mb-2">
+                <span class="text-sm text-gray-600">{{ blog.publish_date|date:"Y · M · d" }}</span> 
+                <a href={% url 'blogpage' slug=blog.slug %}> {{blog.title}}</a>
+            </li>
+            {% endfor %}
+        </ul> 
+    </div>
+</main>
+{% endblock %}

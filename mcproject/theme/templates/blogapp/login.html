@@ -1,0 +1,37 @@
+{% extends "../base.html" %}
+{% block title %} Marcus Codex - Login {% endblock %}
+{% block body %}
+<main>
+    <div class="container text-sm mb-20">
+        <!-- Breadcrumbs Start -->
+        <div class="text-sm breadcrumbs pt-20">
+            <ul>
+            <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+            <li><a href={% url 'login' %} class="hover:text-primary">Login</a></li> 
+            </ul>
+        </div>
+        <!-- Breadcrumbs End -->
+    
+        <div class="flex flex-col w-full">
+            <div class="divider"></div>
+        </div>         
+      <!-- Latest Post Start -->
+        <div class="pt-20 flex flex-col text-center">
+            <h1 class="mt-10 text-5xl font-bold">Login</h1>
+            <div class="mt-6 border-solid border-4 rounded-3xl border-opacity-75 border-primary p-6"> 
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="flex my-4 justify-center">
+                        <input type="text" placeholder="Username" class="input input-bordered w-1/2 max-w-xs" name="username" maxlength="150" required="" id="id_username">                
+                    </div>
+                    <div class="flex justify-center">
+                        <input type="password" placeholder="Password" class="input input-bordered w-1/2 max-w-xs" name="password" maxlength="150" required="" id="id_password">
+                    </div>
+                    <button type="submit" class="my-4 btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg">Login</button>                
+                    <p>If you don't have an account, <a href="{% url "register" %}">register here</a>.</p>                    
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

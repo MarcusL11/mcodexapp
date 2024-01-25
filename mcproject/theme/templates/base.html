@@ -1,0 +1,49 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html data-theme="autumn" lang="en">
+	<head>
+    <title>
+		{% block head_title %}
+		{% endblock head_title %}
+	</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		{% tailwind_preload_css %}
+		{% tailwind_css %}
+	</head>
+	<header>
+		<div class="fixed w-full z-50">
+			{% include "partials/_header.html" %}
+		</div>
+	</header>
+	<body>
+		<script>
+			const storedTheme = localStorage.getItem('selectedTheme');
+			if (storedTheme) {
+			  document.documentElement.setAttribute('data-theme', storedTheme);
+			  document.getElementById('themeSelector').checked = storedTheme !== 'autumn';
+			}
+			
+			const themeSelector = document.getElementById('themeSelector');
+			themeSelector.addEventListener('change', handleThemeChange);
+		
+			function handleThemeChange() {
+			  const selectedTheme = themeSelector.checked ? themeSelector.value : 'autumn';
+			  document.documentElement.setAttribute('data-theme', selectedTheme);
+			  localStorage.setItem('selectedTheme', selectedTheme);
+			}
+		</script>    				
+		{% block body %}
+		{% endblock body %}
+
+		<script src="{% static 'js/base.js' %}"></script>
+		{% block js %}
+		{% endblock js %}
+	</body>
+	<footer>
+		<div class = "">
+			{% include "partials/_footer.html" %}
+		</div>
+	</footer>
+</html>

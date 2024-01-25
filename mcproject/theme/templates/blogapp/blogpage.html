@@ -1,0 +1,89 @@
+{% extends "../base.html" %}
+{% load static %}
+{% load blogapp_extras %}
+{% block head_title %}
+MarcusCodex - Blog
+{% endblock head_title %}
+{% block body %}
+<!-- Table of Cnntent Btn Start-->
+<div class="absolute invisible sm:visible z-50">
+  <div class="dropdown fixed mt-20 pt-10">
+    <div tabindex="0" role="button" class="btn btn-primary m-1">Table of Contents</div>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+        {% for content in toc %}
+          <li><a href="#{{content.slug}}" class="scroll-link">{{ content.content }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- Table of Cnntent Btn End-->         
+
+<main>
+  <div class="container text-sm">
+    <!-- Breadcrumbs Start -->
+    <div class="text-sm breadcrumbs pt-20">
+      <ul>
+        <li><a href={% url "home" %} class="hover:text-primary">Home</a></li> 
+        <li><a href={% url 'categories' tag_id='all' %} class="hover:text-primary">All Posts</a></li> 
+        <li><a href="" class="hover:text-primary">{{post.title}}</a></li> 
+      </ul>
+    </div>
+    <!-- Breadcrumbs End -->
+
+    <div class="flex flex-col w-full">
+      <div class="divider"></div>
+    </div>
+
+    <content>
+      <article>
+        <!-- Title Start -->
+        <h1 class="mt-4 text-left">{{ post.title }}</h1>
+        <p class="text-left mb-2">{{ post.publish_date|date:"F d, Y" }}</p>
+        <div class="flex flex-wrap mb-8 text-gray-400">
+          <p class="mr-2">Tags: </p>
+          {% for tag in tags %}
+          <div class="mr-2">
+            <a href="{% url 'categories' tag.name %}" class="link hover:text-primary">{{ tag.name|capfirst }}</a>
+            {% if not forloop.last %}
+            ,
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Title End  -->
+
+        <!-- Content Start -->
+        <div class ="">
+          {{ post.content|render_markdown }}
+          <div class="mockup-code invisible">
+          </div>
+        </div>
+        <!-- Content End -->            
+      </article>
+    </content>  
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>		      
+<script>
+  // Initialize smooth-scroll
+  const scroll = new SmoothScroll('.scroll-link[href*="#"]', {
+    speed: 1000, // Adjust scroll speed as needed
+    speedAsDuration: true,
+  });
+
+  // Add event listeners to scroll smoothly on link click
+  const scrollLinks = document.querySelectorAll('.scroll-link');
+
+  scrollLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const targetId = link.getAttribute('href').substring(1); // Get the target section's ID without the '#'
+      const targetSection = document.getElementById(targetId);
+
+      // Scroll smoothly to the target section
+      scroll.animateScroll(targetSection);
+    });
+  });
+</script>      
+{% endblock %}
